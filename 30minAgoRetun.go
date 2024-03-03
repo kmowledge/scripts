@@ -38,14 +38,17 @@ func main() {
 	formatCheckTime(&timeIn)
 	// timeSlice := s.Split(timeIn, ":")
 	// timeAmount := fmt.Sprint(timeSlice[0], "h", timeSlice[1], "m", timeSlice[2], "s")
-	timeOut, _ := time.Parse("TimeOnly", timeIn) //TimeOnly != Longform(layout)
 	fmt.Println(`	Now, tell me what duration to substract from this.
 	Use format like this: 1h20m39s`) //strings. parse +/- adding/substr option
 	var durIn string
 	fmt.Scanln(&durIn)
 	formatCheckDuration(&durIn)
-
+	timeInType, _ := time.Parse(time.TimeOnly, timeIn) //TimeOnly != Longform(layout)
+	durInType, _ := time.ParseDuration(durIn)
+	var timeOutType time.Time
+	timeOutType = timeInType.Add(-durInType)
+	timeOut := timeOutType.Format(time.TimeOnly)
 	// timeFormatted := time.parseString(timeIn)
 	// timeOut := timeFormatted.Sub(time.Minute * 30)
-	fmt.Println("You said: ", timeOut)
+	fmt.Println("Result: ", timeOut)
 }
