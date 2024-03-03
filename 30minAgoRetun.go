@@ -8,11 +8,14 @@ import (
 
 func formatCheckTime(a *string) {
 	for {
-		if b, _ := regexp.MatchString(`^(([01]?[0-9]|2[0-3]):[0-5]?[0-9]:[0-5]?[0-9])$`, *a); b {
+		if b, _ := regexp.MatchString(`^(([01]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9])$`, *a); b {
 			break
 		}
-		fmt.Println("stick to the (24h) time format ---> 00:00:00")
-		fmt.Scanln(a) //If you scan to &address of a pointer, you get infinite loop of the print above. Why?
+		fmt.Println("Error: stick to the given 24h time format ---> 00:00:00")
+		fmt.Scanln(a) //If you scan to &address of a pointer, you get infinite loop of the print above. Why.
+		if *a == "enough" {
+			return
+		}
 	}
 }
 
@@ -26,34 +29,33 @@ func formatCheckTime(a *string) {
 // 	}
 // }
 
-// func 30minEarlier(a)
-
 func main() {
-	fmt.Println(`	Hello, gimme time in the following format 00:00:00
+	fmt.Println("Hello, I can add and substract duration from a point in time, according to your wish.")
+	for {
+		fmt.Println(`Give me a point in time in the following format 00:00:00.
 	To exit the program, answer "enough".`)
-	var timeIn string
-	fmt.Scanln(&timeIn)
-	if timeIn == "enough" {
-		return
-	}
-	formatCheckTime(&timeIn)
-	// timeSlice := s.Split(timeIn, ":")
-	// timeAmount := fmt.Sprint(timeSlice[0], "h", timeSlice[1], "m", timeSlice[2], "s")
-	fmt.Println(`	Now, tell me what duration to substract from this.
+		var timeIn string
+		fmt.Scanln(&timeIn)
+		if timeIn == "enough" {
+			return
+		}
+		formatCheckTime(&timeIn)
+		fmt.Println(`	Now, give me an amount of time.
+	By default I will add it. To substract add "-" before.
 	Use format like this: 1h20m39s
-	Accepted examples: 60s, 48h1s, 9999m`) //strings. parse +/- adding/substr option
-	var durIn string
-	fmt.Scanln(&durIn)
-	if durIn == "enough" {
-		return
+	Accepted examples: 60s, -48h1s, 000h999999m, -2h20m13s`)
+		var durIn string
+		fmt.Scanln(&durIn)
+		if durIn == "enough" {
+			return
+		}
+		// formatCheckDuration(&durIn)
+		timeInType, _ := time.Parse(time.TimeOnly, timeIn)
+		fmt.Println("Read value: timeInType")
+		durInType, _ := time.ParseDuration(durIn)
+		var timeOutType time.Time
+		timeOutType = timeInType.Add(durInType)
+		timeOut := timeOutType.Format(time.TimeOnly)
+		fmt.Println("Result: ", timeOut)
 	}
-	// formatCheckDuration(&durIn)
-	timeInType, _ := time.Parse(time.TimeOnly, timeIn) //TimeOnly != Longform(layout)
-	durInType, _ := time.ParseDuration(durIn)
-	var timeOutType time.Time
-	timeOutType = timeInType.Add(-durInType)
-	timeOut := timeOutType.Format(time.TimeOnly)
-	// timeFormatted := time.parseString(timeIn)
-	// timeOut := timeFormatted.Sub(time.Minute * 30)
-	fmt.Println("Result: ", timeOut)
 }
