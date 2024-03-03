@@ -59,3 +59,28 @@ func main() {
 		fmt.Println("Result: ", timeOut)
 	}
 }
+
+/*
+>>> Bug report: Strange program behaviours in response to atypical user inputs.
+
+1. First input (point in time):
+1.1. General observations
+
+1.1.1. If user adds a word before writing a point in time in correct format, it disturbs the "hour" figure and resets it to 0.
+1.1.2. If the word is added after the correct time input, it skips the second input and prints the result - same as if it was sent blank.
+
+
+1.2. Examples of bug behaviour
+
+1.2.1. This input triggers error message 2 times. Why.
+kurczak 1:30:00
+Error: stick to the given 24h time format ---> 00:00:00
+Error: stick to the given 24h time format ---> 00:00:00
+
+1.2.2. a) This input breaks the loop, allowing to move to the 2nd input. Why.
+	 b) But reads only 1 char from hour.
+kurczak 11:30:00
+Error: stick to the given 24h time format ---> 00:00:00
+Read value: 0000-01-01 01:30:00 +0000 UTC
+
+*/
