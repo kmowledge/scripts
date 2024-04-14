@@ -2,7 +2,6 @@
 
 import webbrowser, sys, time
 
-arg = ''
 for arg in sys.argv[1:]:
       url = ['https://', arg, '/']
       webbrowser.open(''.join(url))
